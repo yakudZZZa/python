@@ -60,9 +60,10 @@ def countNominal(in_list):
 
 def dealerPlay():
     dealerScore = 0
+    print("\nWell now it's the Dealer's turn")
     while dealerScore < 17:
-        if dealerScore > 0: print("\nI'le get one more card")
-        else: print("\nI'le get one card")
+        if dealerScore > 0: print("\nDealer get one more card")
+        else: print("\nDealer get one card")
         getRandomCard(suitsDeck, cardsDeck, dealerCardsString, dealerCounterList)
         dealerScore = countNominal(dealerCounterList)
         time.sleep(1)
