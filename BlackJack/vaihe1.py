@@ -8,7 +8,12 @@ userScore: int = 0
 dealerCardsString = []
 dealerCounterList = []
 dealerScore: int = 0
-question = "Do you want add card (y/n)?: "
+userScoreWins = 0
+dealerScoreWins = 0
+questionToAddCard = "Do you want to add card (y/n)?: "
+questionToReplay = "Do you want to play one nore time (y/n)?: "
+positiveAnswers = ["y", "yes"]
+negativeAnswers = ["n", "no"]
 
 cards = {'A':1, 2:2, 3:3, 4:4, 5:5, 6:6, 7:7, 8:8, 9:9, 10:10, 'J':11, 'Q':12, 'K':13}
 # suitsDeck = ["clubs", "diamonds", "hearts", "spades"]
@@ -66,7 +71,7 @@ def dealerPlay():
         else: print("\nDealer get one card")
         getRandomCard(suitsDeck, cardsDeck, dealerCardsString, dealerCounterList)
         dealerScore = countNominal(dealerCounterList)
-        time.sleep(1)
+        time.sleep(2)
         print("Dealer's cards is:", getGoodString(dealerCardsString))
         print("Dealer's score is:", dealerScore)
     if dealerScore > 21:
@@ -77,13 +82,11 @@ def dealerPlay():
 
 def userPlay():
     userScore = 0
-    positiveAnswers = ["y", "yes"]
-    negativeAnswers = ["n", "no"]
     desireToContinue = True
     while desireToContinue and userScore <= 21:
         if userScore > 0:
             while True:
-                userAnswer = input(question).lower()
+                userAnswer = input(questionToAddCard).lower()
                 if userAnswer in positiveAnswers: 
                     desireToContinue = True
                     getRandomCard(suitsDeck, cardsDeck, userCardsString, userCounterList)
@@ -106,19 +109,38 @@ def userPlay():
         print("\nOk, User have a good cards. User's Score is " + str(userScore) + ". Let's check what the Dealer has!\n")
     return userScore
 
+while True:
+    print("\nWell, let's play!\n")
+    userScore = userPlay()
+    dealerScore = dealerPlay()
+    print("\n")
 
-print("\nWell, let's play!\n")
-userScore = userPlay()
-dealerScore = dealerPlay()
-print("\n")
+    if userScore > 21 and dealerScore > 21:
+        print("Nobody won :(")
+    elif userScore > dealerScore and userScore > 21:
+        dealerScoreWins += 1
+        print("The Dealer has won!")
+    elif userScore < dealerScore and dealerScore > 21:
+        userScoreWins += 1
+        print("The User has won!")
+    elif userScore > dealerScore:
+        userScoreWins += 1
+        print("The User has won!")
+    elif userScore < dealerScore:
+        dealerScoreWins += 1
+        print("The Dealer has won!")
+    elif userScore == dealerScore:
+        print("This game has parity")
 
-if userScore > 21 and dealerScore > 21:
-    print("Nobody won :(")
-elif userScore > dealerScore:
-    print("The User has won!")
-elif userScore < dealerScore:
-    print("The Dealer has won!")
-elif userScore == dealerScore:
-    print("This game has parity")
-
-print("\n")
+    print("\n")
+    userAnswer = input(questionToReplay).lower()
+    if userAnswer in positiveAnswers: 
+        userCardsString = []
+        userCounterList = []
+        userScore: int = 0
+        dealerCardsString = []
+        dealerCounterList = []
+        dealerScore: int = 0
+    if userAnswer in negativeAnswers:
+        print("\n\n\nWell played! User won", userScoreWins, "times and Dealer won", dealerScoreWins, "times.\n")
+        break
